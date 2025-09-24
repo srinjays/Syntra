@@ -439,62 +439,71 @@ export default function PromptOptimizer() {
         </Card>
 
         {/* Input Section */}
-        <Card className="mb-6 sm:mb-8 elegant-card scroll-reveal">
-          <CardHeader className="pb-3 sm:pb-4 px-4 sm:px-6">
-            <CardTitle className="flex items-center gap-2 sm:gap-3 text-xl sm:text-2xl font-bold">
-              <div className="p-1.5 sm:p-2 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10">
-                <Wand2 className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-              </div>
-              Your Raw Idea
-            </CardTitle>
-            <CardDescription className="text-sm sm:text-base text-muted-foreground">
-              Enter your messy, incomplete, or vague prompt. Don't worry about structure - our AI will transform it into
-              something amazing!
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="pt-2 px-4 sm:px-6">
-            <div className="space-y-4 sm:space-y-6">
-              <div className="relative">
-                <Textarea
-                  placeholder="Example: make me something cool for my website header that looks modern and has good colors and maybe some animations..."
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  className="premium-input min-h-32 sm:min-h-40 resize-none text-sm sm:text-base leading-relaxed rounded-2xl p-4 sm:p-6 border-2"
-                />
-                <div className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 text-xs text-muted-foreground bg-background/80 px-2 py-1 rounded-lg">
-                  {input.length} characters
-                </div>
-              </div>
+        <div className="relative mb-6 sm:mb-8">
+          <div className="spotlight-container">
+            <div className="spotlight-beam"></div>
+            <Card className="spotlight-card scroll-reveal relative z-10 border-0 bg-gradient-to-br from-background/95 via-primary/5 to-background/95 backdrop-blur-xl shadow-2xl">
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/20 via-transparent to-primary/20 opacity-50"></div>
+              <div className="absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_50%_50%,rgba(var(--primary),0.1),transparent_70%)]"></div>
 
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
-                <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
-                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                  <span className="truncate">
-                    Ready to optimize • {categories.find((c) => c.id === category)?.label} •{" "}
-                    {models.find((m) => m.id === selectedModel)?.name}
-                  </span>
+              <CardHeader className="pb-3 sm:pb-4 px-4 sm:px-6 relative z-10">
+                <CardTitle className="flex items-center gap-2 sm:gap-3 text-xl sm:text-2xl font-bold">
+                  <div className="p-1.5 sm:p-2 rounded-xl bg-gradient-to-br from-primary/30 to-primary/20 shadow-lg glow-effect">
+                    <Wand2 className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+                  </div>
+                  <span className="spotlight-text">Your Raw Idea</span>
+                </CardTitle>
+                <CardDescription className="text-sm sm:text-base text-muted-foreground">
+                  Enter your messy, incomplete, or vague prompt. Don't worry about structure - our AI will transform it
+                  into something amazing!
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-2 px-4 sm:px-6 relative z-10">
+                <div className="space-y-4 sm:space-y-6">
+                  <div className="relative">
+                    <Textarea
+                      placeholder="Example: make me something cool for my website header that looks modern and has good colors and maybe some animations..."
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      className="spotlight-textarea min-h-32 sm:min-h-40 resize-none text-sm sm:text-base leading-relaxed rounded-2xl p-4 sm:p-6 border-2 border-primary/30 bg-gradient-to-br from-background/80 to-primary/10 backdrop-blur-sm focus:border-primary/60 focus:shadow-2xl focus:shadow-primary/30 transition-all duration-500"
+                    />
+                    <div className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 text-xs text-muted-foreground bg-primary/20 backdrop-blur-sm px-2 py-1 rounded-lg border border-primary/30">
+                      {input.length} characters
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-gradient-to-r from-primary/15 to-primary/10 border border-primary/30 backdrop-blur-sm">
+                    <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                      <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse glow-dot"></div>
+                      <span className="truncate">
+                        Ready to optimize • {categories.find((c) => c.id === category)?.label} •{" "}
+                        {models.find((m) => m.id === selectedModel)?.name}
+                      </span>
+                    </div>
+                    <Button
+                      onClick={optimizePrompt}
+                      disabled={isOptimizing || !input.trim()}
+                      className="spotlight-button w-full sm:w-auto min-w-40 sm:min-w-48 h-11 sm:h-12 text-sm sm:text-base font-semibold rounded-xl bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-2xl shadow-primary/40 hover:shadow-3xl hover:shadow-primary/60 transition-all duration-500 relative overflow-hidden"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full hover:translate-x-full transition-transform duration-1000"></div>
+                      {isOptimizing ? (
+                        <>
+                          <Wand2 className="h-4 w-4 sm:h-5 sm:w-5 mr-2 sm:mr-3" />
+                          Optimizing Magic...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 mr-2 sm:mr-3" />
+                          Optimize My Prompt
+                        </>
+                      )}
+                    </Button>
+                  </div>
                 </div>
-                <Button
-                  onClick={optimizePrompt}
-                  disabled={isOptimizing || !input.trim()}
-                  className="w-full sm:w-auto min-w-40 sm:min-w-48 h-11 sm:h-12 text-sm sm:text-base font-semibold rounded-xl premium-button"
-                >
-                  {isOptimizing ? (
-                    <>
-                      <Wand2 className="h-4 w-4 sm:h-5 sm:w-5 mr-2 sm:mr-3" />
-                      Optimizing Magic...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 mr-2 sm:mr-3" />
-                      Optimize My Prompt
-                    </>
-                  )}
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
 
         {/* Output Section */}
         {optimizedPrompt && (
