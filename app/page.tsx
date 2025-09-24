@@ -207,7 +207,7 @@ export default function PromptOptimizer() {
               <h1 className="text-xl sm:text-2xl font-bold gradient-text-animated">SYNTRA</h1>
             </div>
             <div className="flex items-center gap-2 sm:gap-4">
-              <Button variant="ghost" size="sm" asChild className="h-8 w-8 sm:h-9 sm:w-9 p-0">
+              <Button variant="ghost" size="sm" asChild className="h-8 w-8 sm:h-9 sm:w-9 p-0 button-selection-box">
                 <a href="https://github.com" target="_blank" rel="noopener noreferrer">
                   <Github className="h-3 w-3 sm:h-4 sm:w-4" />
                 </a>
@@ -232,7 +232,7 @@ export default function PromptOptimizer() {
               <Button
                 size="lg"
                 onClick={scrollToOptimizer}
-                className="text-sm sm:text-base px-6 sm:px-8 h-11 sm:h-12 premium-button"
+                className="text-sm sm:text-base px-6 sm:px-8 h-11 sm:h-12 premium-button button-selection-box"
               >
                 Start optimizing
                 <Sparkles className="ml-2 h-4 w-4" />
@@ -241,7 +241,7 @@ export default function PromptOptimizer() {
                 variant="outline"
                 size="lg"
                 onClick={scrollToCategories}
-                className="text-sm sm:text-base px-6 sm:px-8 h-11 sm:h-12 bg-transparent"
+                className="text-sm sm:text-base px-6 sm:px-8 h-11 sm:h-12 bg-transparent button-selection-box"
               >
                 View features
                 <ExternalLink className="ml-2 h-4 w-4" />
@@ -322,9 +322,9 @@ export default function PromptOptimizer() {
                   <div
                     key={model.id}
                     onClick={() => setSelectedModel(model.id)}
-                    className={`category-card p-4 sm:p-6 rounded-2xl cursor-pointer transition-all duration-500 fade-in-delay-${index + 1} ${
+                    className={`category-card selection-box interactive-hint interactive-glow clickable-area selection-indicator p-4 sm:p-6 rounded-2xl cursor-pointer transition-all duration-500 fade-in-delay-${index + 1} ${
                       isSelected
-                        ? "border-2 border-primary bg-gradient-to-br from-primary/20 to-primary/10 shadow-2xl shadow-primary/30 scale-105 ring-2 ring-primary/50"
+                        ? "border-2 border-primary bg-gradient-to-br from-primary/20 to-primary/10 shadow-2xl shadow-primary/30 scale-105 ring-2 ring-primary/50 selected"
                         : "border border-border/50 bg-card hover:border-primary/40 hover:shadow-lg hover:scale-102"
                     }`}
                   >
@@ -400,9 +400,9 @@ export default function PromptOptimizer() {
                   <div
                     key={cat.id}
                     onClick={() => setCategory(cat.id)}
-                    className={`category-card p-4 sm:p-6 rounded-2xl cursor-pointer transition-all duration-500 fade-in-delay-${index + 1} relative ${
+                    className={`category-card selection-box interactive-hint interactive-glow clickable-area selection-indicator p-4 sm:p-6 rounded-2xl cursor-pointer transition-all duration-500 fade-in-delay-${index + 1} relative ${
                       isSelected
-                        ? "border-2 border-primary bg-gradient-to-br from-primary/25 to-primary/15 shadow-2xl shadow-primary/40 scale-105 ring-2 ring-primary/50"
+                        ? "border-2 border-primary bg-gradient-to-br from-primary/25 to-primary/15 shadow-2xl shadow-primary/40 scale-105 ring-2 ring-primary/50 selected"
                         : "border border-border/50 bg-card hover:border-primary/40 hover:shadow-lg hover:scale-102"
                     }`}
                   >
@@ -480,9 +480,9 @@ export default function PromptOptimizer() {
 
         {/* Input Section */}
         <div className="relative mb-6 sm:mb-8">
-          <div className="spotlight-container">
-            <div className="spotlight-beam"></div>
-            <Card className="spotlight-card scroll-reveal relative z-10 border-0 bg-gradient-to-br from-background/95 via-primary/5 to-background/95 backdrop-blur-xl shadow-2xl">
+          <div className="magnetic-container">
+            <div className="magnetic-field"></div>
+            <Card className="magnetic-card scroll-reveal relative z-10 border-0 bg-gradient-to-br from-background/95 via-primary/5 to-background/95 backdrop-blur-xl shadow-2xl">
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/20 via-transparent to-primary/20 opacity-50"></div>
               <div className="absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_50%_50%,rgba(var(--primary),0.1),transparent_70%)]"></div>
 
@@ -491,7 +491,7 @@ export default function PromptOptimizer() {
                   <div className="p-1.5 sm:p-2 rounded-xl bg-gradient-to-br from-primary/30 to-primary/20 shadow-lg glow-effect">
                     <Wand2 className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                   </div>
-                  <span className="spotlight-text">Your Raw Idea</span>
+                  <span className="magnetic-text">Your Raw Idea</span>
                 </CardTitle>
                 <CardDescription className="text-sm sm:text-base text-muted-foreground">
                   Enter your messy, incomplete, or vague prompt. Don't worry about structure - our AI will transform it
@@ -505,7 +505,7 @@ export default function PromptOptimizer() {
                       placeholder="Example: make me something cool for my website header that looks modern and has good colors and maybe some animations..."
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
-                      className="spotlight-textarea min-h-32 sm:min-h-40 resize-none text-sm sm:text-base leading-relaxed rounded-2xl p-4 sm:p-6 border-2 border-primary/30 bg-gradient-to-br from-background/80 to-primary/10 backdrop-blur-sm focus:border-primary/60 focus:shadow-2xl focus:shadow-primary/30 transition-all duration-500"
+                      className="magnetic-textarea min-h-32 sm:min-h-40 resize-none text-sm sm:text-base leading-relaxed rounded-2xl p-4 sm:p-6 border-2 border-primary/30 bg-gradient-to-br from-background/80 to-primary/10 backdrop-blur-sm focus:border-primary/60 focus:shadow-2xl focus:shadow-primary/30 transition-all duration-500"
                     />
                     <div className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 text-xs text-muted-foreground bg-primary/20 backdrop-blur-sm px-2 py-1 rounded-lg border border-primary/30">
                       {input.length} characters
@@ -523,7 +523,7 @@ export default function PromptOptimizer() {
                     <Button
                       onClick={optimizePrompt}
                       disabled={isOptimizing || !input.trim()}
-                      className="spotlight-button w-full sm:w-auto min-w-40 sm:min-w-48 h-11 sm:h-12 text-sm sm:text-base font-semibold rounded-xl bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-2xl shadow-primary/40 hover:shadow-3xl hover:shadow-primary/60 transition-all duration-500 relative overflow-hidden"
+                      className="magnetic-button button-selection-box w-full sm:w-auto min-w-40 sm:min-w-48 h-11 sm:h-12 text-sm sm:text-base font-semibold rounded-xl bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-2xl shadow-primary/40 hover:shadow-3xl hover:shadow-primary/60 transition-all duration-500 relative overflow-hidden"
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full hover:translate-x-full transition-transform duration-1000"></div>
                       {isOptimizing ? (
@@ -583,7 +583,7 @@ export default function PromptOptimizer() {
                   size="sm"
                   variant="ghost"
                   onClick={copyToClipboard}
-                  className="absolute top-2 sm:top-3 right-2 sm:right-3 h-7 w-7 sm:h-8 sm:w-8 p-0"
+                  className="absolute top-2 sm:top-3 right-2 sm:right-3 h-7 w-7 sm:h-8 sm:w-8 p-0 button-selection-box"
                 >
                   {copied ? (
                     <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-green-500" />
@@ -625,17 +625,17 @@ export default function PromptOptimizer() {
                 prompt.
               </p>
               <div className="flex gap-2 sm:gap-3">
-                <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0">
+                <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0 button-selection-box">
                   <a href="https://github.com" target="_blank" rel="noopener noreferrer">
                     <Github className="h-3 w-3 sm:h-4 sm:w-4" />
                   </a>
                 </Button>
-                <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0">
+                <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0 button-selection-box">
                   <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
                     <Twitter className="h-3 w-3 sm:h-4 sm:w-4" />
                   </a>
                 </Button>
-                <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0">
+                <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0 button-selection-box">
                   <a href="mailto:hello@syntra.ai">
                     <Mail className="h-3 w-3 sm:h-4 sm:w-4" />
                   </a>
@@ -698,11 +698,9 @@ export default function PromptOptimizer() {
             </div>
           </div>
 
-          <div className="border-t border-border/40 mt-8 sm:mt-12 pt-6 sm:pt-8 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
-            <p className="text-xs sm:text-sm text-muted-foreground text-center sm:text-left">
-              © 2025 SYNTRA. All rights reserved.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6 text-xs sm:text-sm text-muted-foreground">
+          <div className="border-t border-border/40 mt-8 sm:mt-12 pt-6 sm:pt-8 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-6 text-xs sm:text-sm text-muted-foreground">
+            <p className="text-center sm:text-left">© 2025 SYNTRA. All rights reserved.</p>
+            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6">
               <span className="text-center">Built with ❤️ for better AI interactions</span>
               <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 text-xs">
                 v1.0.0
