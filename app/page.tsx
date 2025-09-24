@@ -200,7 +200,8 @@ export default function PromptOptimizer() {
             <div className="flex items-center gap-2 sm:gap-3">
               <div className="relative">
                 <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-primary to-primary/60 rounded-lg flex items-center justify-center">
-                  <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 text-primary-foreground sparkle-animation" />
+                  {/* Removed animate-spin class from logo sparkles */}
+                  <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 text-primary-foreground" />
                 </div>
               </div>
               <h1 className="text-xl sm:text-2xl font-bold gradient-text-animated">SYNTRA</h1>
@@ -234,7 +235,7 @@ export default function PromptOptimizer() {
                 className="text-sm sm:text-base px-6 sm:px-8 h-11 sm:h-12 premium-button"
               >
                 Start optimizing
-                <Sparkles className="ml-2 h-4 w-4 sparkle-animation" />
+                <Sparkles className="ml-2 h-4 w-4" />
               </Button>
               <Button
                 variant="outline"
@@ -270,7 +271,7 @@ export default function PromptOptimizer() {
         <Card className="mb-6 sm:mb-8 border-primary/20 elegant-card scroll-reveal float-animation" id="features">
           <CardHeader className="text-center px-4 sm:px-6">
             <CardTitle className="flex items-center justify-center gap-2 text-xl sm:text-2xl">
-              <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 sparkle-animation" />
+              <Sparkles className="h-5 w-5 sm:h-6 sm:w-6" />
               Compatible with All Major AI Tools
             </CardTitle>
             <CardDescription className="text-sm sm:text-base">
@@ -304,7 +305,7 @@ export default function PromptOptimizer() {
           <CardHeader className="pb-3 sm:pb-4 px-4 sm:px-6">
             <CardTitle className="flex items-center gap-2 sm:gap-3 text-xl sm:text-2xl font-bold">
               <div className="p-1.5 sm:p-2 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10">
-                <Brain className="h-5 w-5 sm:h-6 sm:w-6 text-primary sparkle-animation" />
+                <Brain className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
               </div>
               Choose AI Model
             </CardTitle>
@@ -333,7 +334,7 @@ export default function PromptOptimizer() {
                         >
                           <IconComponent
                             className={`h-4 w-4 sm:h-5 sm:w-5 ${
-                              selectedModel === model.id ? "text-primary sparkle-animation" : "text-muted-foreground"
+                              selectedModel === model.id ? "text-primary" : "text-muted-foreground"
                             }`}
                           />
                         </div>
@@ -363,7 +364,7 @@ export default function PromptOptimizer() {
           <CardHeader className="pb-3 sm:pb-4 px-4 sm:px-6">
             <CardTitle className="flex items-center gap-2 sm:gap-3 text-xl sm:text-2xl font-bold">
               <div className="p-1.5 sm:p-2 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10">
-                <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary sparkle-animation" />
+                <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
               </div>
               Choose Your Category
             </CardTitle>
@@ -392,7 +393,7 @@ export default function PromptOptimizer() {
                       {cat.icon}
                     </div>
                     <div>
-                      <h3 className="font-bold text-sm sm:text-lg mb-1">{cat.label}</h3>
+                      <p className="font-bold text-sm sm:text-lg mb-1">{cat.label}</p>
                       <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{cat.description}</p>
                     </div>
                   </div>
@@ -442,7 +443,7 @@ export default function PromptOptimizer() {
           <CardHeader className="pb-3 sm:pb-4 px-4 sm:px-6">
             <CardTitle className="flex items-center gap-2 sm:gap-3 text-xl sm:text-2xl font-bold">
               <div className="p-1.5 sm:p-2 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10">
-                <Wand2 className="h-5 w-5 sm:h-6 sm:w-6 text-primary sparkle-animation" />
+                <Wand2 className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
               </div>
               Your Raw Idea
             </CardTitle>
@@ -480,12 +481,12 @@ export default function PromptOptimizer() {
                 >
                   {isOptimizing ? (
                     <>
-                      <Wand2 className="h-4 w-4 sm:h-5 sm:w-5 mr-2 sm:mr-3 animate-spin" />
+                      <Wand2 className="h-4 w-4 sm:h-5 sm:w-5 mr-2 sm:mr-3" />
                       Optimizing Magic...
                     </>
                   ) : (
                     <>
-                      <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 mr-2 sm:mr-3 sparkle-animation" />
+                      <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 mr-2 sm:mr-3" />
                       Optimize My Prompt
                     </>
                   )}
