@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
@@ -90,6 +90,27 @@ export default function PromptOptimizer() {
   const [optimizationMetadata, setOptimizationMetadata] = useState<any>(null)
   const { toast } = useToast()
 
+  const [revealedElements, setRevealedElements] = useState<Set<string>>(new Set())
+
+  const handleScrollReveal = () => {
+    const elements = document.querySelectorAll(".scroll-reveal")
+    elements.forEach((element, index) => {
+      const rect = element.getBoundingClientRect()
+      const isVisible = rect.top < window.innerHeight && rect.bottom > 0
+
+      if (isVisible && !revealedElements.has(`element-${index}`)) {
+        element.classList.add("revealed")
+        setRevealedElements((prev) => new Set(prev).add(`element-${index}`))
+      }
+    })
+  }
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScrollReveal)
+    handleScrollReveal() // Initial check
+    return () => window.removeEventListener("scroll", handleScrollReveal)
+  }, [revealedElements])
+
   const optimizePrompt = async () => {
     if (!input.trim()) {
       toast({
@@ -170,21 +191,19 @@ export default function PromptOptimizer() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background animated-grid-bg">
       {/* Navigation Header */}
-      <div className="gradient-bg">
+      <div className="gradient-bg hero-glow">
         {/* Navigation */}
-        <nav className="border-b border-border/40 backdrop-blur-sm">
+        <nav className="border-b border-border/40 backdrop-blur-sm fade-in">
           <div className="container mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
             <div className="flex items-center gap-2 sm:gap-3">
               <div className="relative">
                 <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-primary to-primary/60 rounded-lg flex items-center justify-center">
-                  <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 text-primary-foreground" />
+                  <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 text-primary-foreground sparkle-animation" />
                 </div>
               </div>
-              <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-                SYNTRA
-              </h1>
+              <h1 className="text-xl sm:text-2xl font-bold gradient-text-animated">SYNTRA</h1>
             </div>
             <div className="flex items-center gap-2 sm:gap-4">
               <Button variant="ghost" size="sm" asChild className="h-8 w-8 sm:h-9 sm:w-9 p-0">
@@ -198,20 +217,24 @@ export default function PromptOptimizer() {
         </nav>
 
         <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 lg:py-16 max-w-4xl">
-          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16 fade-in-delay-1">
             <div className="mb-4 sm:mb-6">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-balance mb-4 sm:mb-6 bg-gradient-to-r from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent leading-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-balance mb-4 sm:mb-6 gradient-text-animated leading-tight">
                 The fastest and most powerful platform for optimizing AI prompts
               </h2>
-              <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto text-balance leading-relaxed px-2">
+              <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto text-balance leading-relaxed px-2 fade-in-delay-2">
                 Transform your messy ideas into perfectly structured AI prompts. Get better results from any AI tool
                 with industry-leading optimization powered by advanced models.
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 sm:px-0">
-              <Button size="lg" onClick={scrollToOptimizer} className="text-sm sm:text-base px-6 sm:px-8 h-11 sm:h-12">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4 sm:px-0 fade-in-delay-3">
+              <Button
+                size="lg"
+                onClick={scrollToOptimizer}
+                className="text-sm sm:text-base px-6 sm:px-8 h-11 sm:h-12 premium-button"
+              >
                 Start optimizing
-                <Sparkles className="ml-2 h-4 w-4" />
+                <Sparkles className="ml-2 h-4 w-4 sparkle-animation" />
               </Button>
               <Button
                 variant="outline"
@@ -225,11 +248,14 @@ export default function PromptOptimizer() {
             </div>
           </div>
 
-          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16 fade-in-delay-4">
             <p className="text-xs sm:text-sm text-muted-foreground mb-6 sm:mb-8">Trusted by builders at</p>
             <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 lg:gap-8 opacity-60 px-4">
-              {["OpenAI", "Anthropic", "Google", "Microsoft", "Meta"].map((company) => (
-                <div key={company} className="text-sm sm:text-base lg:text-lg font-medium text-muted-foreground">
+              {["OpenAI", "Anthropic", "Google", "Microsoft", "Meta"].map((company, index) => (
+                <div
+                  key={company}
+                  className={`text-sm sm:text-base lg:text-lg font-medium text-muted-foreground fade-in-delay-${index + 1}`}
+                >
                   {company}
                 </div>
               ))}
@@ -241,10 +267,10 @@ export default function PromptOptimizer() {
       {/* Main content container */}
       <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-4xl" id="optimizer">
         {/* AI Tools Compatibility Section */}
-        <Card className="mb-6 sm:mb-8 border-primary/20" id="features">
+        <Card className="mb-6 sm:mb-8 border-primary/20 elegant-card scroll-reveal float-animation" id="features">
           <CardHeader className="text-center px-4 sm:px-6">
             <CardTitle className="flex items-center justify-center gap-2 text-xl sm:text-2xl">
-              <Sparkles className="h-5 w-5 sm:h-6 sm:w-6" />
+              <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 sparkle-animation" />
               Compatible with All Major AI Tools
             </CardTitle>
             <CardDescription className="text-sm sm:text-base">
@@ -253,10 +279,10 @@ export default function PromptOptimizer() {
           </CardHeader>
           <CardContent className="px-4 sm:px-6">
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-              {aiTools.map((tool) => (
+              {aiTools.map((tool, index) => (
                 <div
                   key={tool.name}
-                  className="flex items-center justify-center p-4 sm:p-6 bg-muted/30 rounded-xl border border-border/50 hover:border-primary/30 transition-all duration-200 hover:bg-muted/50"
+                  className={`flex items-center justify-center p-4 sm:p-6 bg-muted/30 rounded-xl border border-border/50 hover:border-primary/30 transition-all duration-200 hover:bg-muted/50 category-card fade-in-delay-${index + 1}`}
                 >
                   <span className="text-xs sm:text-sm font-medium text-foreground text-center">{tool.name}</span>
                 </div>
@@ -274,11 +300,11 @@ export default function PromptOptimizer() {
         </Card>
 
         {/* Choose AI Model */}
-        <Card className="mb-6 sm:mb-8 elegant-card">
+        <Card className="mb-6 sm:mb-8 elegant-card scroll-reveal float-animation-delay">
           <CardHeader className="pb-3 sm:pb-4 px-4 sm:px-6">
             <CardTitle className="flex items-center gap-2 sm:gap-3 text-xl sm:text-2xl font-bold">
               <div className="p-1.5 sm:p-2 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10">
-                <Brain className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+                <Brain className="h-5 w-5 sm:h-6 sm:w-6 text-primary sparkle-animation" />
               </div>
               Choose AI Model
             </CardTitle>
@@ -288,13 +314,13 @@ export default function PromptOptimizer() {
           </CardHeader>
           <CardContent className="pt-2 px-4 sm:px-6">
             <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-              {models.map((model) => {
+              {models.map((model, index) => {
                 const IconComponent = model.icon
                 return (
                   <div
                     key={model.id}
                     onClick={() => setSelectedModel(model.id)}
-                    className={`category-card p-4 sm:p-6 rounded-2xl cursor-pointer transition-all duration-300 ${
+                    className={`category-card p-4 sm:p-6 rounded-2xl cursor-pointer transition-all duration-300 fade-in-delay-${index + 1} ${
                       selectedModel === model.id
                         ? "border-primary bg-gradient-to-br from-primary/10 to-primary/5 shadow-lg"
                         : "hover:border-primary/30"
@@ -307,7 +333,7 @@ export default function PromptOptimizer() {
                         >
                           <IconComponent
                             className={`h-4 w-4 sm:h-5 sm:w-5 ${
-                              selectedModel === model.id ? "text-primary" : "text-muted-foreground"
+                              selectedModel === model.id ? "text-primary sparkle-animation" : "text-muted-foreground"
                             }`}
                           />
                         </div>
@@ -333,11 +359,11 @@ export default function PromptOptimizer() {
         </Card>
 
         {/* Category Selection */}
-        <Card className="mb-6 sm:mb-8 elegant-card purple-gradient-bg" id="categories">
+        <Card className="mb-6 sm:mb-8 elegant-card purple-gradient-bg scroll-reveal" id="categories">
           <CardHeader className="pb-3 sm:pb-4 px-4 sm:px-6">
             <CardTitle className="flex items-center gap-2 sm:gap-3 text-xl sm:text-2xl font-bold">
               <div className="p-1.5 sm:p-2 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10">
-                <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+                <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-primary sparkle-animation" />
               </div>
               Choose Your Category
             </CardTitle>
@@ -347,11 +373,11 @@ export default function PromptOptimizer() {
           </CardHeader>
           <CardContent className="pt-2 px-4 sm:px-6">
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
-              {categories.map((cat) => (
+              {categories.map((cat, index) => (
                 <div
                   key={cat.id}
                   onClick={() => setCategory(cat.id)}
-                  className={`category-card p-4 sm:p-6 rounded-2xl cursor-pointer transition-all duration-300 ${
+                  className={`category-card p-4 sm:p-6 rounded-2xl cursor-pointer transition-all duration-300 fade-in-delay-${index + 1} ${
                     category === cat.id
                       ? "border-primary bg-gradient-to-br from-primary/15 to-primary/8 shadow-lg"
                       : "hover:border-primary/30"
@@ -412,11 +438,11 @@ export default function PromptOptimizer() {
         </Card>
 
         {/* Input Section */}
-        <Card className="mb-6 sm:mb-8 elegant-card">
+        <Card className="mb-6 sm:mb-8 elegant-card scroll-reveal">
           <CardHeader className="pb-3 sm:pb-4 px-4 sm:px-6">
             <CardTitle className="flex items-center gap-2 sm:gap-3 text-xl sm:text-2xl font-bold">
               <div className="p-1.5 sm:p-2 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10">
-                <Wand2 className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+                <Wand2 className="h-5 w-5 sm:h-6 sm:w-6 text-primary sparkle-animation" />
               </div>
               Your Raw Idea
             </CardTitle>
@@ -450,7 +476,7 @@ export default function PromptOptimizer() {
                 <Button
                   onClick={optimizePrompt}
                   disabled={isOptimizing || !input.trim()}
-                  className="w-full sm:w-auto min-w-40 sm:min-w-48 h-11 sm:h-12 text-sm sm:text-base font-semibold rounded-xl bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="w-full sm:w-auto min-w-40 sm:min-w-48 h-11 sm:h-12 text-sm sm:text-base font-semibold rounded-xl premium-button"
                 >
                   {isOptimizing ? (
                     <>
@@ -459,7 +485,7 @@ export default function PromptOptimizer() {
                     </>
                   ) : (
                     <>
-                      <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 mr-2 sm:mr-3" />
+                      <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 mr-2 sm:mr-3 sparkle-animation" />
                       Optimize My Prompt
                     </>
                   )}
@@ -471,7 +497,7 @@ export default function PromptOptimizer() {
 
         {/* Output Section */}
         {optimizedPrompt && (
-          <Card className="border-primary/20 bg-gradient-to-br from-card to-primary/5 mb-6 sm:mb-8">
+          <Card className="border-primary/20 bg-gradient-to-br from-card to-primary/5 mb-6 sm:mb-8 elegant-card scroll-reveal">
             <CardHeader className="px-4 sm:px-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0">
                 <div>

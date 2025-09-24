@@ -158,6 +158,13 @@
   background: linear-gradient(135deg, oklch(0.99 0 0) 0%, oklch(0.97 0.01 280) 100%);
   border: 1px solid oklch(0.9 0.02 280);
   box-shadow: 0 4px 20px oklch(0.7 0.15 280 / 0.12), 0 1px 3px oklch(0.7 0.15 280 / 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.elegant-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px oklch(0.7 0.15 280 / 0.18), 0 4px 12px oklch(0.7 0.15 280 / 0.12);
 }
 
 .dark .elegant-card {
@@ -166,17 +173,33 @@
   box-shadow: 0 4px 20px oklch(0.04 0 0 / 0.3);
 }
 
+.dark .elegant-card:hover {
+  box-shadow: 0 8px 30px oklch(0.04 0 0 / 0.4);
+}
+
 .premium-input {
   background: linear-gradient(135deg, oklch(0.99 0 0) 0%, oklch(0.98 0.005 280) 100%);
   border: 2px solid oklch(0.9 0.02 280);
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 2px 8px oklch(0.7 0.15 280 / 0.06);
+  position: relative;
 }
 
 .premium-input:focus {
   border-color: oklch(0.7 0.15 280);
-  box-shadow: 0 0 0 3px oklch(0.7 0.15 280 / 0.12), 0 4px 12px oklch(0.7 0.15 280 / 0.08);
+  box-shadow: 0 0 0 3px oklch(0.7 0.15 280 / 0.12), 0 4px 12px oklch(0.7 0.15 280 / 0.08), 0 0 20px
+    oklch(0.7 0.15 280 / 0.05);
   background: linear-gradient(135deg, oklch(1 0 0) 0%, oklch(0.99 0.01 280) 100%);
+  animation: input-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes input-glow {
+  0% {
+    box-shadow: 0 0 0 3px oklch(0.7 0.15 280 / 0.12), 0 4px 12px oklch(0.7 0.15 280 / 0.08);
+  }
+  100% {
+    box-shadow: 0 0 0 3px oklch(0.7 0.15 280 / 0.18), 0 4px 12px oklch(0.7 0.15 280 / 0.12);
+  }
 }
 
 .dark .premium-input {
@@ -186,20 +209,38 @@
 
 .dark .premium-input:focus {
   border-color: oklch(0.7 0.15 280);
-  box-shadow: 0 0 0 3px oklch(0.7 0.15 280 / 0.2);
+  box-shadow: 0 0 0 3px oklch(0.7 0.15 280 / 0.2), 0 0 20px oklch(0.7 0.15 280 / 0.1);
 }
 
+/* Enhanced category card animations */
 .category-card {
   background: linear-gradient(135deg, oklch(0.98 0 0) 0%, oklch(0.96 0.01 280) 100%);
   border: 2px solid oklch(0.92 0.02 280);
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 2px 8px oklch(0.7 0.15 280 / 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.category-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, oklch(0.7 0.15 280 / 0.1), transparent);
+  transition: left 0.6s ease;
+}
+
+.category-card:hover::before {
+  left: 100%;
 }
 
 .category-card:hover {
   border-color: oklch(0.7 0.15 280 / 0.6);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px oklch(0.7 0.15 280 / 0.18), 0 4px 12px oklch(0.7 0.15 280 / 0.12);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 30px oklch(0.7 0.15 280 / 0.2), 0 6px 15px oklch(0.7 0.15 280 / 0.15);
   background: linear-gradient(135deg, oklch(0.99 0 0) 0%, oklch(0.97 0.015 280) 100%);
 }
 
@@ -208,21 +249,45 @@
   border: 2px solid oklch(0.15 0.02 280);
 }
 
-.dark .category-card:hover {
-  border-color: oklch(0.7 0.15 280 / 0.5);
-  box-shadow: 0 8px 25px oklch(0.04 0 0 / 0.4);
+.dark .category-card::before {
+  background: linear-gradient(90deg, transparent, oklch(0.7 0.15 280 / 0.15), transparent);
 }
 
-/* Added sophisticated button lighting effects for light theme */
+.dark .category-card:hover {
+  border-color: oklch(0.7 0.15 280 / 0.5);
+  box-shadow: 0 12px 30px oklch(0.04 0 0 / 0.5), 0 6px 15px oklch(0.7 0.15 280 / 0.1);
+}
+
+/* Enhanced button animations with ripple effect */
 .premium-button {
   background: linear-gradient(135deg, oklch(0.7 0.15 280) 0%, oklch(0.65 0.18 300) 100%);
   box-shadow: 0 4px 12px oklch(0.7 0.15 280 / 0.25), 0 2px 4px oklch(0.7 0.15 280 / 0.15);
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: oklch(1 0 0 / 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.premium-button:hover::before {
+  width: 300px;
+  height: 300px;
 }
 
 .premium-button:hover {
-  box-shadow: 0 6px 20px oklch(0.7 0.15 280 / 0.35), 0 4px 8px oklch(0.7 0.15 280 / 0.2);
-  transform: translateY(-1px);
+  box-shadow: 0 8px 25px oklch(0.7 0.15 280 / 0.35), 0 4px 12px oklch(0.7 0.15 280 / 0.2);
+  transform: translateY(-2px) scale(1.02);
 }
 
 .dark .premium-button {
@@ -231,47 +296,134 @@
 }
 
 .dark .premium-button:hover {
-  box-shadow: 0 6px 20px oklch(0.04 0 0 / 0.4);
+  box-shadow: 0 8px 25px oklch(0.04 0 0 / 0.4), 0 4px 12px oklch(0.7 0.15 280 / 0.1);
 }
 
-/* Added glowing text effects for light theme */
-.glow-text {
-  text-shadow: 0 0 20px oklch(0.7 0.15 280 / 0.3), 0 0 40px oklch(0.7 0.15 280 / 0.2);
-}
-
-.dark .glow-text {
-  text-shadow: 0 0 20px oklch(0.7 0.15 280 / 0.4), 0 0 40px oklch(0.7 0.15 280 / 0.3);
-}
-
-/* Added ambient lighting for hero sections in light theme */
-.hero-glow {
+/* Subtle geometric grid background animations inspired by AI SDK and Vercel designs */
+.animated-grid-bg {
   position: relative;
+  overflow: hidden;
 }
 
-.hero-glow::before {
+.animated-grid-bg::before {
   content: "";
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, oklch(0.7 0.15 280 / 0.08) 0%, oklch(0.65 0.18 300 / 0.04) 30%, transparent 70%);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(oklch(0.7 0.15 280 / 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(0.7 0.15 280 / 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: grid-move 20s linear infinite;
   z-index: -1;
-  animation: pulse 4s ease-in-out infinite;
 }
 
-.dark .hero-glow::before {
-  background: radial-gradient(circle, oklch(0.7 0.15 280 / 0.12) 0%, oklch(0.65 0.18 300 / 0.06) 30%, transparent 70%);
+.dark .animated-grid-bg::before {
+  background-image: linear-gradient(oklch(0.7 0.15 280 / 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(0.7 0.15 280 / 0.08) 1px, transparent 1px);
 }
 
-@keyframes pulse {
+@keyframes grid-move {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(50px, 50px);
+  }
+}
+
+/* Smooth fade-in animations for elements */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.fade-in-delay-1 {
+  animation-delay: 0.1s;
+}
+.fade-in-delay-2 {
+  animation-delay: 0.2s;
+}
+.fade-in-delay-3 {
+  animation-delay: 0.3s;
+}
+.fade-in-delay-4 {
+  animation-delay: 0.4s;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Floating animation for cards */
+.float-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+.float-animation-delay {
+  animation-delay: -3s;
+}
+
+@keyframes float {
   0%,
   100% {
-    opacity: 0.5;
-    transform: scale(1);
+    transform: translateY(0px);
   }
   50% {
-    opacity: 1;
-    transform: scale(1.05);
+    transform: translateY(-10px);
   }
+}
+
+/* Sparkle animation for icons */
+.sparkle-animation {
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1) rotate(180deg);
+    opacity: 0.8;
+  }
+}
+
+/* Gradient text animation */
+.gradient-text-animated {
+  background: linear-gradient(45deg, oklch(0.7 0.15 280), oklch(0.65 0.18 300), oklch(0.6 0.2 320), oklch(0.7 0.15 280));
+  background-size: 300% 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 4s ease-in-out infinite;
+}
+
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Subtle scroll reveal animation */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
 }
