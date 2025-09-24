@@ -4,13 +4,13 @@ import { openai } from "@ai-sdk/openai"
 import { type NextRequest, NextResponse } from "next/server"
 
 const categoryPrompts = {
-  creative: `You are an expert at crafting creative prompts for AI tools. Transform the user's messy input into a well-structured, detailed prompt that will generate amazing creative content. Include specific details about style, mood, composition, colors, and artistic direction. Make it clear and actionable.`,
+  creative: `You are an expert at crafting creative prompts for AI tools. Transform the user's messy input into a well-structured, detailed prompt that will generate amazing creative content. Include specific details about style, mood, composition, colors, and artistic direction. Make it clear and actionable. Focus on visual elements, creative constraints, and desired aesthetic outcomes.`,
 
-  coding: `You are an expert at crafting coding prompts for AI tools. Transform the user's messy input into a clear, technical prompt that specifies the programming language, framework, functionality, requirements, and any constraints. Include details about code structure, best practices, and expected output format.`,
+  coding: `You are an expert at crafting coding prompts for AI tools. Transform the user's messy input into a clear, technical prompt that specifies the programming language, framework, functionality, requirements, and any constraints. Include details about code structure, best practices, error handling, testing requirements, and expected output format. Be specific about technical specifications.`,
 
-  business: `You are an expert at crafting business prompts for AI tools. Transform the user's messy input into a professional, strategic prompt that clearly defines the business context, objectives, target audience, constraints, and desired outcomes. Make it actionable and results-focused.`,
+  business: `You are an expert at crafting business prompts for AI tools. Transform the user's messy input into a professional, strategic prompt that clearly defines the business context, objectives, target audience, constraints, KPIs, and desired outcomes. Include market context, competitive considerations, and measurable success criteria. Make it actionable and results-focused.`,
 
-  academic: `You are an expert at crafting academic prompts for AI tools. Transform the user's messy input into a scholarly, well-structured prompt that specifies the academic level, subject area, research requirements, citation needs, and analytical depth required. Make it precise and academically rigorous.`,
+  academic: `You are an expert at crafting academic prompts for AI tools. Transform the user's messy input into a scholarly, well-structured prompt that specifies the academic level, subject area, research methodology, citation requirements, analytical framework, and depth required. Include specific academic standards, source requirements, and evaluation criteria. Make it precise and academically rigorous.`,
 }
 
 const RATE_LIMIT_WINDOW = 60 * 1000 // 1 minute
@@ -41,7 +41,80 @@ function checkRateLimit(key: string): { allowed: boolean; resetTime: number } {
   return { allowed: true, resetTime: record.resetTime }
 }
 
+const modelConfigs = {
+  groq: {
+    model: groq("llama-3.3-70b-versatile"),
+    maxTokens: 600,
+    temperature: 0.7,
+    topP: 0.9,
+    frequencyPenalty: 0.1,
+    presencePenalty: 0.1,
+  },
+  openai: {
+    model: openai("gpt-4o-mini"),
+    maxTokens: 800,
+    temperature: 0.6,
+    topP: 0.95,
+    frequencyPenalty: 0.2,
+    presencePenalty: 0.1,
+  },
+}
+
+const performanceMetrics = new Map<
+  string,
+  {
+    totalRequests: number
+    totalLatency: number
+    successRate: number
+    lastUsed: number
+  }
+>()
+
+function updatePerformanceMetrics(model: string, latency: number, success: boolean) {
+  const current = performanceMetrics.get(model) || {
+    totalRequests: 0,
+    totalLatency: 0,
+    successRate: 0,
+    lastUsed: 0,
+  }
+
+  current.totalRequests++
+  current.totalLatency += latency
+  current.successRate = (current.successRate * (current.totalRequests - 1) + (success ? 1 : 0)) / current.totalRequests
+  current.lastUsed = Date.now()
+
+  performanceMetrics.set(model, current)
+}
+
+function selectOptimalModel(input: string, userModel: string, category: string): string {
+  // If user explicitly chose a model, respect their choice
+  if (userModel && (userModel === "groq" || userModel === "openai")) {
+    return userModel
+  }
+
+  // Intelligent selection based on input characteristics
+  const inputLength = input.length
+  const complexity = input.split(" ").length
+  const hasSpecialRequirements = /\b(detailed|complex|comprehensive|thorough|in-depth)\b/i.test(input)
+
+  // For complex academic or business prompts, prefer OpenAI
+  if ((category === "academic" || category === "business") && (complexity > 20 || hasSpecialRequirements)) {
+    return "openai"
+  }
+
+  // For simple creative or coding prompts, prefer Groq for speed
+  if ((category === "creative" || category === "coding") && complexity < 15 && inputLength < 200) {
+    return "groq"
+  }
+
+  // Default to Groq for speed and cost efficiency
+  return "groq"
+}
+
 export async function POST(request: NextRequest) {
+  const startTime = Date.now()
+  let selectedModelName = "groq"
+
   try {
     const rateLimitKey = getRateLimitKey(request)
     const { allowed, resetTime } = checkRateLimit(rateLimitKey)
@@ -59,7 +132,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { input, category, model = "groq" } = await request.json()
+    const { input, category, model = "auto" } = await request.json()
 
     if (!input || typeof input !== "string") {
       return NextResponse.json({ error: "Valid input text is required" }, { status: 400 })
@@ -75,38 +148,66 @@ export async function POST(request: NextRequest) {
 
     const systemPrompt = categoryPrompts[category as keyof typeof categoryPrompts]
 
-    let selectedModel
-    if (model === "openai") {
-      selectedModel = openai("gpt-4o-mini")
-    } else {
-      selectedModel = groq("llama-3.3-70b-versatile")
-    }
+    selectedModelName = selectOptimalModel(input, model, category)
+    const config = modelConfigs[selectedModelName as keyof typeof modelConfigs]
 
-    console.log("[v0] Processing prompt optimization", { category, model, inputLength: input.length })
+    console.log("[v0] Processing prompt optimization", {
+      category,
+      requestedModel: model,
+      selectedModel: selectedModelName,
+      inputLength: input.length,
+      complexity: input.split(" ").length,
+    })
 
-    const { text } = await generateText({
-      model: selectedModel,
-      system: systemPrompt,
-      prompt: `Transform this messy user input into a perfectly optimized prompt:
+    const optimizationPrompt = `Transform this messy user input into a perfectly optimized ${category} prompt:
 
 "${input}"
 
-Return ONLY the optimized prompt, nothing else. Make it clear, specific, and actionable. The optimized prompt should be 2-4 sentences and include all necessary context and requirements.`,
-      maxTokens: 500,
-      temperature: 0.7,
+OPTIMIZATION REQUIREMENTS:
+- Make it clear, specific, and actionable
+- Include all necessary context and requirements
+- Structure it for maximum AI comprehension
+- Add relevant constraints and success criteria
+- Ensure it's 2-4 sentences but comprehensive
+- Focus on ${category}-specific best practices
+
+Return ONLY the optimized prompt, nothing else.`
+
+    const { text } = await generateText({
+      model: config.model,
+      system: systemPrompt,
+      prompt: optimizationPrompt,
+      maxTokens: config.maxTokens,
+      temperature: config.temperature,
+      topP: config.topP,
+      frequencyPenalty: config.frequencyPenalty,
+      presencePenalty: config.presencePenalty,
     })
 
-    console.log("[v0] Successfully optimized prompt", { outputLength: text.length })
+    const latency = Date.now() - startTime
+    updatePerformanceMetrics(selectedModelName, latency, true)
+
+    console.log("[v0] Successfully optimized prompt", {
+      outputLength: text.length,
+      latency: `${latency}ms`,
+      model: selectedModelName,
+    })
 
     return NextResponse.json({
       optimizedPrompt: text.trim(),
       metadata: {
-        model: model,
+        model: selectedModelName,
         category: category,
         timestamp: new Date().toISOString(),
+        latency: latency,
+        inputComplexity: input.split(" ").length,
+        optimization: model === "auto" ? "intelligent" : "manual",
       },
     })
   } catch (error) {
+    const latency = Date.now() - startTime
+    updatePerformanceMetrics(selectedModelName, latency, false)
+
     console.error("[v0] Error optimizing prompt:", error)
 
     if (error instanceof Error) {
@@ -129,4 +230,19 @@ Return ONLY the optimized prompt, nothing else. Make it clear, specific, and act
 
     return NextResponse.json({ error: "Failed to optimize prompt. Please try again." }, { status: 500 })
   }
+}
+
+export async function GET() {
+  const metrics = Object.fromEntries(
+    Array.from(performanceMetrics.entries()).map(([model, data]) => [
+      model,
+      {
+        ...data,
+        averageLatency: Math.round(data.totalLatency / data.totalRequests),
+        successRate: Math.round(data.successRate * 100),
+      },
+    ]),
+  )
+
+  return NextResponse.json({ metrics, timestamp: new Date().toISOString() })
 }
