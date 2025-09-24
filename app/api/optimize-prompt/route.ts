@@ -114,8 +114,6 @@ function selectOptimalModel(input: string, userModel: string, category: string):
 export async function POST(request: NextRequest) {
   const startTime = Date.now()
   let selectedModelName = "groq"
-  let attemptCount = 0
-  const maxAttempts = 3
 
   try {
     const rateLimitKey = getRateLimitKey(request)
@@ -151,6 +149,7 @@ export async function POST(request: NextRequest) {
     const systemPrompt = categoryPrompts[category as keyof typeof categoryPrompts]
 
     selectedModelName = selectOptimalModel(input, model, category)
+    const config = modelConfigs[selectedModelName as keyof typeof modelConfigs]
 
     console.log("[v0] Processing prompt optimization", {
       category,
@@ -174,105 +173,62 @@ OPTIMIZATION REQUIREMENTS:
 
 Return ONLY the optimized prompt, nothing else.`
 
-    let lastError: Error | null = null
+    const { text } = await generateText({
+      model: config.model,
+      system: systemPrompt,
+      prompt: optimizationPrompt,
+      maxTokens: config.maxTokens,
+      temperature: config.temperature,
+      topP: config.topP,
+      frequencyPenalty: config.frequencyPenalty,
+      presencePenalty: config.presencePenalty,
+    })
 
-    while (attemptCount < maxAttempts) {
-      try {
-        attemptCount++
-        const config = modelConfigs[selectedModelName as keyof typeof modelConfigs]
-
-        console.log(`[v0] Attempt ${attemptCount} using ${selectedModelName}`)
-
-        const { text } = await generateText({
-          model: config.model,
-          system: systemPrompt,
-          prompt: optimizationPrompt,
-          maxTokens: config.maxTokens,
-          temperature: config.temperature,
-          topP: config.topP,
-          frequencyPenalty: config.frequencyPenalty,
-          presencePenalty: config.presencePenalty,
-        })
-
-        const latency = Date.now() - startTime
-        updatePerformanceMetrics(selectedModelName, latency, true)
-
-        console.log("[v0] Successfully optimized prompt", {
-          outputLength: text.length,
-          latency: `${latency}ms`,
-          model: selectedModelName,
-          attempts: attemptCount,
-        })
-
-        return NextResponse.json({
-          optimizedPrompt: text.trim(),
-          metadata: {
-            model: selectedModelName,
-            category: category,
-            timestamp: new Date().toISOString(),
-            latency: latency,
-            inputComplexity: input.split(" ").length,
-            optimization: model === "auto" ? "intelligent" : "manual",
-            attempts: attemptCount,
-          },
-        })
-      } catch (error) {
-        lastError = error as Error
-        console.log(`[v0] Attempt ${attemptCount} failed with ${selectedModelName}:`, error)
-
-        // If OpenAI fails due to quota/billing, immediately switch to Groq
-        if (selectedModelName === "openai" && error instanceof Error) {
-          if (
-            error.message.includes("quota") ||
-            error.message.includes("billing") ||
-            error.message.includes("exceeded")
-          ) {
-            console.log("[v0] OpenAI quota exceeded, switching to Groq")
-            selectedModelName = "groq"
-            continue
-          }
-        }
-
-        // If Groq fails, try OpenAI (unless we already tried it)
-        if (selectedModelName === "groq" && attemptCount < maxAttempts) {
-          console.log("[v0] Groq failed, trying OpenAI")
-          selectedModelName = "openai"
-          continue
-        }
-
-        // If we've tried both models, break
-        if (attemptCount >= 2) {
-          break
-        }
-      }
-    }
-
-    // If all attempts failed
     const latency = Date.now() - startTime
-    updatePerformanceMetrics(selectedModelName, latency, false)
+    updatePerformanceMetrics(selectedModelName, latency, true)
 
-    console.error(
-      `[v0] Error optimizing prompt: Failed after ${attemptCount} attempts. Last error:`,
-      lastError?.message,
-    )
+    console.log("[v0] Successfully optimized prompt", {
+      outputLength: text.length,
+      latency: `${latency}ms`,
+      model: selectedModelName,
+    })
 
-    if (lastError?.message.includes("quota") || lastError?.message.includes("billing")) {
-      return NextResponse.json(
-        { error: "AI service quota exceeded. Please try again later or contact support." },
-        { status: 503 },
-      )
-    }
-
-    return NextResponse.json(
-      { error: "Failed to optimize prompt after multiple attempts. Please try again." },
-      { status: 500 },
-    )
+    return NextResponse.json({
+      optimizedPrompt: text.trim(),
+      metadata: {
+        model: selectedModelName,
+        category: category,
+        timestamp: new Date().toISOString(),
+        latency: latency,
+        inputComplexity: input.split(" ").length,
+        optimization: model === "auto" ? "intelligent" : "manual",
+      },
+    })
   } catch (error) {
     const latency = Date.now() - startTime
     updatePerformanceMetrics(selectedModelName, latency, false)
 
-    console.error("[v0] Unexpected error:", error)
-    return NextResponse.json({ error: "An unexpected error occurred. Please try again." }, { status: 500 })
+    console.error("[v0] Error optimizing prompt:", error)
+
+    if (error instanceof Error) {
+      if (error.message.includes("decommissioned") || error.message.includes("deprecated")) {
+        return NextResponse.json(
+          { error: "AI model temporarily unavailable. Please try the other model option." },
+          { status: 503 },
+        )
+      }
+      if (error.message.includes("rate limit") || error.message.includes("quota")) {
+        return NextResponse.json(
+          { error: "AI service temporarily unavailable. Please try again later or try the other model." },
+          { status: 503 },
+        )
+      }
+      if (error.message.includes("timeout")) {
+        return NextResponse.json({ error: "Request timeout. Please try again." }, { status: 408 })
+      }
+    }
+
+    return NextResponse.json({ error: "Failed to optimize prompt. Please try again." }, { status: 500 })
   }
 }
 

@@ -158,13 +158,6 @@
   background: linear-gradient(135deg, oklch(0.99 0 0) 0%, oklch(0.97 0.01 280) 100%);
   border: 1px solid oklch(0.9 0.02 280);
   box-shadow: 0 4px 20px oklch(0.7 0.15 280 / 0.12), 0 1px 3px oklch(0.7 0.15 280 / 0.08);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-}
-
-.elegant-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px oklch(0.7 0.15 280 / 0.18), 0 4px 12px oklch(0.7 0.15 280 / 0.12);
 }
 
 .dark .elegant-card {
@@ -173,22 +166,17 @@
   box-shadow: 0 4px 20px oklch(0.04 0 0 / 0.3);
 }
 
-.dark .elegant-card:hover {
-  box-shadow: 0 8px 30px oklch(0.04 0 0 / 0.4);
-}
-
 .premium-input {
   background: linear-gradient(135deg, oklch(0.99 0 0) 0%, oklch(0.98 0.005 280) 100%);
   border: 2px solid oklch(0.9 0.02 280);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s ease;
   box-shadow: 0 2px 8px oklch(0.7 0.15 280 / 0.06);
-  position: relative;
 }
 
 .premium-input:focus {
   border-color: oklch(0.7 0.15 280);
-  box-shadow: 0 0 0 3px oklch(0.7 0.15 280 / 0.15), 0 8px 25px oklch(0.7 0.15 280 / 0.12), 0 0 40px
-    oklch(0.7 0.15 280 / 0.08);
+  box-shadow: 0 0 0 3px oklch(0.7 0.15 280 / 0.12), 0 4px 12px oklch(0.7 0.15 280 / 0.08);
+  background: linear-gradient(135deg, oklch(1 0 0) 0%, oklch(0.99 0.01 280) 100%);
 }
 
 .dark .premium-input {
@@ -197,557 +185,93 @@
 }
 
 .dark .premium-input:focus {
-  box-shadow: 0 0 0 3px oklch(0.7 0.15 280 / 0.25), 0 8px 25px oklch(0.04 0 0 / 0.4), 0 0 40px
-    oklch(0.7 0.15 280 / 0.15);
+  border-color: oklch(0.7 0.15 280);
+  box-shadow: 0 0 0 3px oklch(0.7 0.15 280 / 0.2);
 }
 
-.optimizer-highlight-card {
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.optimizer-highlight-card::before {
-  content: "";
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(
-    45deg,
-    oklch(0.7 0.15 280 / 0.3),
-    oklch(0.65 0.18 300 / 0.2),
-    oklch(0.6 0.2 320 / 0.3),
-    oklch(0.7 0.15 280 / 0.3)
-  );
-  background-size: 400% 400%;
-  border-radius: inherit;
-  z-index: -1;
-  animation: border-glow 3s ease-in-out infinite;
-}
-
-@keyframes border-glow {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-.dark .optimizer-highlight-card::before {
-  background: linear-gradient(
-    45deg,
-    oklch(0.7 0.15 280 / 0.4),
-    oklch(0.65 0.18 300 / 0.3),
-    oklch(0.6 0.2 320 / 0.4),
-    oklch(0.7 0.15 280 / 0.4)
-  );
-}
-
-.optimizer-textarea {
-  position: relative;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.optimizer-textarea:focus {
-  transform: scale(1.01);
-  box-shadow: 0 0 0 3px oklch(0.7 0.15 280 / 0.15), 0 8px 25px oklch(0.7 0.15 280 / 0.12), 0 0 40px
-    oklch(0.7 0.15 280 / 0.08);
-}
-
-.dark .optimizer-textarea:focus {
-  box-shadow: 0 0 0 3px oklch(0.7 0.15 280 / 0.25), 0 8px 25px oklch(0.04 0 0 / 0.4), 0 0 40px
-    oklch(0.7 0.15 280 / 0.15);
-}
-
-.optimizer-button {
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.optimizer-button::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: oklch(1 0 0 / 0.3);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: width 0.6s ease, height 0.6s ease;
-}
-
-.optimizer-button:hover::after {
-  width: 300px;
-  height: 300px;
-}
-
-.optimizer-button:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 12px 35px oklch(0.7 0.15 280 / 0.4), 0 6px 15px oklch(0.7 0.15 280 / 0.25);
-}
-
-.dark .optimizer-button:hover {
-  box-shadow: 0 12px 35px oklch(0.04 0 0 / 0.5), 0 6px 15px oklch(0.7 0.15 280 / 0.2);
-}
-
-/* Magnetic field effect for optimizer box */
-.magnetic-container {
-  position: relative;
-  padding: 2rem 0;
-}
-
-.magnetic-field {
-  position: absolute;
-  top: -20%;
-  left: -20%;
-  width: 140%;
-  height: 140%;
-  background: radial-gradient(circle at 20% 30%, oklch(0.7 0.15 280 / 0.06) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, oklch(0.65 0.18 300 / 0.04) 0%, transparent 50%),
-    radial-gradient(circle at 60% 20%, oklch(0.6 0.2 320 / 0.05) 0%, transparent 50%);
-  z-index: 0;
-  pointer-events: none;
-  animation: magnetic-flow 8s ease-in-out infinite;
-}
-
-@keyframes magnetic-flow {
-  0%,
-  100% {
-    transform: rotate(0deg) scale(1);
-    opacity: 0.6;
-  }
-  33% {
-    transform: rotate(120deg) scale(1.1);
-    opacity: 0.8;
-  }
-  66% {
-    transform: rotate(240deg) scale(0.9);
-    opacity: 0.7;
-  }
-}
-
-.dark .magnetic-field {
-  background: radial-gradient(circle at 20% 30%, oklch(0.7 0.15 280 / 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, oklch(0.65 0.18 300 / 0.06) 0%, transparent 50%),
-    radial-gradient(circle at 60% 20%, oklch(0.6 0.2 320 / 0.07) 0%, transparent 50%);
-}
-
-.magnetic-card {
-  position: relative;
-  z-index: 10;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 2px solid transparent;
-  background-clip: padding-box;
-  overflow: hidden;
-}
-
-.magnetic-card::before {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  padding: 2px;
-  background: linear-gradient(
-    90deg,
-    oklch(0.7 0.15 280 / 0.3),
-    oklch(0.65 0.18 300 / 0.2),
-    oklch(0.6 0.2 320 / 0.3),
-    oklch(0.7 0.15 280 / 0.3)
-  );
-  background-size: 200% 100%;
-  border-radius: inherit;
-  z-index: -1;
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: xor;
-  animation: magnetic-border 3s linear infinite;
-}
-
-@keyframes magnetic-border {
-  0% {
-    background-position: 0% 0%;
-  }
-  100% {
-    background-position: 200% 0%;
-  }
-}
-
-.magnetic-card::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, oklch(0.7 0.15 280 / 0.1), transparent);
-  animation: magnetic-sweep 4s ease-in-out infinite;
-}
-
-@keyframes magnetic-sweep {
-  0%,
-  100% {
-    left: -100%;
-    opacity: 0;
-  }
-  50% {
-    left: 100%;
-    opacity: 1;
-  }
-}
-
-.magnetic-card:hover {
-  transform: translateY(-3px) scale(1.01);
-  box-shadow: 0 10px 25px oklch(0.7 0.15 280 / 0.15), 0 5px 15px oklch(0.7 0.15 280 / 0.1), 0 0 30px
-    oklch(0.7 0.15 280 / 0.05);
-}
-
-.dark .magnetic-card:hover {
-  box-shadow: 0 10px 25px oklch(0.04 0 0 / 0.4), 0 5px 15px oklch(0.7 0.15 280 / 0.2), 0 0 30px
-    oklch(0.7 0.15 280 / 0.1);
-}
-
-.magnetic-textarea {
-  position: relative;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-}
-
-.magnetic-textarea::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(45deg, transparent 30%, oklch(0.7 0.15 280 / 0.03) 50%, transparent 70%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.magnetic-textarea:focus {
-  transform: scale(1.005);
-  box-shadow: 0 0 0 3px oklch(0.7 0.15 280 / 0.15), 0 8px 20px oklch(0.7 0.15 280 / 0.1), 0 0 40px
-    oklch(0.7 0.15 280 / 0.05);
-}
-
-.magnetic-textarea:focus::before {
-  opacity: 1;
-  animation: magnetic-pulse 2s ease-in-out infinite;
-}
-
-@keyframes magnetic-pulse {
-  0%,
-  100% {
-    transform: scale(1) rotate(0deg);
-    opacity: 0.3;
-  }
-  50% {
-    transform: scale(1.02) rotate(180deg);
-    opacity: 0.6;
-  }
-}
-
-.dark .magnetic-textarea:focus {
-  box-shadow: 0 0 0 3px oklch(0.7 0.15 280 / 0.2), 0 8px 20px oklch(0.04 0 0 / 0.3), 0 0 40px oklch(0.7 0.15 280 / 0.1);
-}
-
-.magnetic-button {
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.magnetic-button::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: radial-gradient(circle, oklch(1 0 0 / 0.2) 0%, oklch(0.7 0.15 280 / 0.1) 50%, transparent 100%);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: all 0.5s ease;
-  z-index: 0;
-}
-
-.magnetic-button:hover::before {
-  width: 250px;
-  height: 250px;
-}
-
-.magnetic-button::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(45deg, transparent, oklch(0.7 0.15 280 / 0.1), transparent);
-  opacity: 0;
-  animation: magnetic-energy 3s ease-in-out infinite;
-}
-
-@keyframes magnetic-energy {
-  0%,
-  100% {
-    opacity: 0;
-    transform: translateX(-100%) skewX(-15deg);
-  }
-  50% {
-    opacity: 0.7;
-    transform: translateX(100%) skewX(-15deg);
-  }
-}
-
-.magnetic-button:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 8px 20px oklch(0.7 0.15 280 / 0.2), 0 4px 10px oklch(0.7 0.15 280 / 0.15);
-}
-
-.dark .magnetic-button:hover {
-  box-shadow: 0 8px 20px oklch(0.04 0 0 / 0.4), 0 4px 10px oklch(0.7 0.15 280 / 0.2);
-}
-
-.magnetic-text {
-  background: linear-gradient(45deg, oklch(0.7 0.15 280), oklch(0.65 0.18 300), oklch(0.6 0.2 320), oklch(0.7 0.15 280));
-  background-size: 300% 300%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: magnetic-text-flow 4s ease-in-out infinite;
-}
-
-@keyframes magnetic-text-flow {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-/* Smooth fade-in animations for elements */
-.fade-in {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeInUp 0.8s ease-out forwards;
-}
-
-.fade-in-delay-1 {
-  animation-delay: 0.1s;
-}
-.fade-in-delay-2 {
-  animation-delay: 0.2s;
-}
-.fade-in-delay-3 {
-  animation-delay: 0.3s;
-}
-.fade-in-delay-4 {
-  animation-delay: 0.4s;
-}
-
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Floating animation for cards */
-.float-animation {
-  animation: float 6s ease-in-out infinite;
-}
-
-.float-animation-delay {
-  animation-delay: -3s;
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-/* Sparkle animation for icons */
-.sparkle-animation {
-  animation: sparkle 2s ease-in-out infinite;
-}
-
-@keyframes sparkle {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.8;
-  }
-}
-
-/* Gradient text animation */
-.gradient-text-animated {
-  background: linear-gradient(45deg, oklch(0.7 0.15 280), oklch(0.65 0.18 300), oklch(0.6 0.2 320), oklch(0.7 0.15 280));
-  background-size: 300% 300%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: gradient-shift 4s ease-in-out infinite;
-}
-
-@keyframes gradient-shift {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-/* Subtle scroll reveal animation */
-.scroll-reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.scroll-reveal.revealed {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Selection box styles for interactive elements */
-.selection-box {
-  position: relative;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.selection-box::before {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  border: 1px dashed oklch(0.7 0.15 280 / 0.2);
-  border-radius: inherit;
-  opacity: 0;
+.category-card {
+  background: linear-gradient(135deg, oklch(0.98 0 0) 0%, oklch(0.96 0.01 280) 100%);
+  border: 2px solid oklch(0.92 0.02 280);
   transition: all 0.3s ease;
-  pointer-events: none;
-  z-index: -1;
+  box-shadow: 0 2px 8px oklch(0.7 0.15 280 / 0.06);
 }
 
-.selection-box:hover::before {
-  opacity: 1;
-  border-color: oklch(0.7 0.15 280 / 0.4);
-  animation: dash-flow 2s linear infinite;
-}
-
-@keyframes dash-flow {
-  0% {
-    border-dash-offset: 0;
-  }
-  100% {
-    border-dash-offset: 20px;
-  }
-}
-
-.dark .selection-box::before {
-  border-color: oklch(0.7 0.15 280 / 0.3);
-}
-
-.dark .selection-box:hover::before {
-  border-color: oklch(0.7 0.15 280 / 0.5);
-}
-
-/* Selection indicator for currently selected items */
-.selection-indicator {
-  position: relative;
-}
-
-.selection-indicator::after {
-  content: "✓";
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 16px;
-  height: 16px;
-  background: oklch(0.7 0.15 280);
-  color: oklch(0.98 0 0);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  font-weight: bold;
-  opacity: 0;
-  transform: scale(0);
-  transition: all 0.2s ease;
-  z-index: 10;
-}
-
-.selection-indicator.selected::after {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* Clickable area enhancement */
-.clickable-area {
-  cursor: pointer;
-  user-select: none;
-  position: relative;
-}
-
-.clickable-area::before {
-  content: "";
-  position: absolute;
-  inset: -4px;
-  border-radius: inherit;
-  background: oklch(0.7 0.15 280 / 0.05);
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  z-index: -1;
-}
-
-.clickable-area:hover::before {
-  opacity: 1;
-}
-
-.dark .clickable-area::before {
-  background: oklch(0.7 0.15 280 / 0.08);
-}
-
-/* Button selection boxes */
-.button-selection-box {
-  position: relative;
-  overflow: visible;
-}
-
-.button-selection-box::before {
-  content: "";
-  position: absolute;
-  inset: -3px;
-  border: 1px solid oklch(0.7 0.15 280 / 0.3);
-  border-radius: calc(var(--radius) + 3px);
-  opacity: 0;
-  transition: all 0.3s ease;
-  z-index: -1;
-}
-
-.button-selection-box:hover::before {
-  opacity: 1;
-  border-color: oklch(0.7 0.15 280 / 0.5);
-  box-shadow: 0 0 0 2px oklch(0.7 0.15 280 / 0.1);
-}
-
-.dark .button-selection-box::before {
-  border-color: oklch(0.7 0.15 280 / 0.4);
-}
-
-.dark .button-selection-box:hover::before {
+.category-card:hover {
   border-color: oklch(0.7 0.15 280 / 0.6);
-  box-shadow: 0 0 0 2px oklch(0.7 0.15 280 / 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px oklch(0.7 0.15 280 / 0.18), 0 4px 12px oklch(0.7 0.15 280 / 0.12);
+  background: linear-gradient(135deg, oklch(0.99 0 0) 0%, oklch(0.97 0.015 280) 100%);
+}
+
+.dark .category-card {
+  background: linear-gradient(135deg, oklch(0.08 0 0) 0%, oklch(0.1 0.02 280) 100%);
+  border: 2px solid oklch(0.15 0.02 280);
+}
+
+.dark .category-card:hover {
+  border-color: oklch(0.7 0.15 280 / 0.5);
+  box-shadow: 0 8px 25px oklch(0.04 0 0 / 0.4);
+}
+
+/* Added sophisticated button lighting effects for light theme */
+.premium-button {
+  background: linear-gradient(135deg, oklch(0.7 0.15 280) 0%, oklch(0.65 0.18 300) 100%);
+  box-shadow: 0 4px 12px oklch(0.7 0.15 280 / 0.25), 0 2px 4px oklch(0.7 0.15 280 / 0.15);
+  transition: all 0.3s ease;
+}
+
+.premium-button:hover {
+  box-shadow: 0 6px 20px oklch(0.7 0.15 280 / 0.35), 0 4px 8px oklch(0.7 0.15 280 / 0.2);
+  transform: translateY(-1px);
+}
+
+.dark .premium-button {
+  background: linear-gradient(135deg, oklch(0.7 0.15 280) 0%, oklch(0.65 0.18 300) 100%);
+  box-shadow: 0 4px 12px oklch(0.04 0 0 / 0.3);
+}
+
+.dark .premium-button:hover {
+  box-shadow: 0 6px 20px oklch(0.04 0 0 / 0.4);
+}
+
+/* Added glowing text effects for light theme */
+.glow-text {
+  text-shadow: 0 0 20px oklch(0.7 0.15 280 / 0.3), 0 0 40px oklch(0.7 0.15 280 / 0.2);
+}
+
+.dark .glow-text {
+  text-shadow: 0 0 20px oklch(0.7 0.15 280 / 0.4), 0 0 40px oklch(0.7 0.15 280 / 0.3);
+}
+
+/* Added ambient lighting for hero sections in light theme */
+.hero-glow {
+  position: relative;
+}
+
+.hero-glow::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, oklch(0.7 0.15 280 / 0.08) 0%, oklch(0.65 0.18 300 / 0.04) 30%, transparent 70%);
+  z-index: -1;
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.dark .hero-glow::before {
+  background: radial-gradient(circle, oklch(0.7 0.15 280 / 0.12) 0%, oklch(0.65 0.18 300 / 0.06) 30%, transparent 70%);
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
 }
