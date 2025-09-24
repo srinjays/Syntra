@@ -317,41 +317,61 @@ export default function PromptOptimizer() {
             <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
               {models.map((model, index) => {
                 const IconComponent = model.icon
+                const isSelected = selectedModel === model.id
                 return (
                   <div
                     key={model.id}
                     onClick={() => setSelectedModel(model.id)}
-                    className={`category-card p-4 sm:p-6 rounded-2xl cursor-pointer transition-all duration-300 fade-in-delay-${index + 1} ${
-                      selectedModel === model.id
-                        ? "border-primary bg-gradient-to-br from-primary/10 to-primary/5 shadow-lg"
-                        : "hover:border-primary/30"
+                    className={`category-card p-4 sm:p-6 rounded-2xl cursor-pointer transition-all duration-500 fade-in-delay-${index + 1} ${
+                      isSelected
+                        ? "border-2 border-primary bg-gradient-to-br from-primary/20 to-primary/10 shadow-2xl shadow-primary/30 scale-105 ring-2 ring-primary/50"
+                        : "border border-border/50 bg-card hover:border-primary/40 hover:shadow-lg hover:scale-102"
                     }`}
                   >
                     <div className="flex items-start justify-between mb-3 sm:mb-4">
                       <div className="flex items-center gap-2 sm:gap-3">
                         <div
-                          className={`p-1.5 sm:p-2 rounded-xl ${selectedModel === model.id ? "bg-primary/20" : "bg-muted/50"}`}
+                          className={`p-1.5 sm:p-2 rounded-xl transition-all duration-300 ${
+                            isSelected
+                              ? "bg-primary/30 shadow-lg shadow-primary/20 scale-110"
+                              : "bg-muted/50 hover:bg-primary/10"
+                          }`}
                         >
                           <IconComponent
-                            className={`h-4 w-4 sm:h-5 sm:w-5 ${
-                              selectedModel === model.id ? "text-primary" : "text-muted-foreground"
+                            className={`h-4 w-4 sm:h-5 sm:w-5 transition-all duration-300 ${
+                              isSelected ? "text-primary scale-110" : "text-muted-foreground"
                             }`}
                           />
                         </div>
-                        <h3 className="font-bold text-base sm:text-lg">{model.name}</h3>
+                        <h3
+                          className={`font-bold text-base sm:text-lg transition-colors duration-300 ${
+                            isSelected ? "text-primary" : "text-foreground"
+                          }`}
+                        >
+                          {model.name}
+                        </h3>
                       </div>
                       <Badge
-                        variant={selectedModel === model.id ? "default" : "secondary"}
-                        className={`px-2 sm:px-3 py-0.5 sm:py-1 font-medium text-xs sm:text-sm ${
-                          selectedModel === model.id
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-muted text-muted-foreground"
+                        variant={isSelected ? "default" : "secondary"}
+                        className={`px-2 sm:px-3 py-0.5 sm:py-1 font-medium text-xs sm:text-sm transition-all duration-300 ${
+                          isSelected
+                            ? "bg-primary text-primary-foreground shadow-lg scale-105"
+                            : "bg-muted text-muted-foreground hover:bg-primary/10"
                         }`}
                       >
                         {model.badge}
                       </Badge>
                     </div>
-                    <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{model.description}</p>
+                    <p
+                      className={`text-xs sm:text-sm leading-relaxed transition-colors duration-300 ${
+                        isSelected ? "text-foreground" : "text-muted-foreground"
+                      }`}
+                    >
+                      {model.description}
+                    </p>
+                    {isSelected && (
+                      <div className="absolute top-2 right-2 w-3 h-3 bg-primary rounded-full animate-pulse shadow-lg shadow-primary/50"></div>
+                    )}
                   </div>
                 )
               })}
@@ -374,31 +394,51 @@ export default function PromptOptimizer() {
           </CardHeader>
           <CardContent className="pt-2 px-4 sm:px-6">
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
-              {categories.map((cat, index) => (
-                <div
-                  key={cat.id}
-                  onClick={() => setCategory(cat.id)}
-                  className={`category-card p-4 sm:p-6 rounded-2xl cursor-pointer transition-all duration-300 fade-in-delay-${index + 1} ${
-                    category === cat.id
-                      ? "border-primary bg-gradient-to-br from-primary/15 to-primary/8 shadow-lg"
-                      : "hover:border-primary/30"
-                  }`}
-                >
-                  <div className="text-center space-y-2 sm:space-y-3">
-                    <div
-                      className={`text-2xl sm:text-3xl p-2 sm:p-3 rounded-2xl inline-block ${
-                        category === cat.id ? "bg-primary/20" : "bg-muted/30"
-                      }`}
-                    >
-                      {cat.icon}
+              {categories.map((cat, index) => {
+                const isSelected = category === cat.id
+                return (
+                  <div
+                    key={cat.id}
+                    onClick={() => setCategory(cat.id)}
+                    className={`category-card p-4 sm:p-6 rounded-2xl cursor-pointer transition-all duration-500 fade-in-delay-${index + 1} relative ${
+                      isSelected
+                        ? "border-2 border-primary bg-gradient-to-br from-primary/25 to-primary/15 shadow-2xl shadow-primary/40 scale-105 ring-2 ring-primary/50"
+                        : "border border-border/50 bg-card hover:border-primary/40 hover:shadow-lg hover:scale-102"
+                    }`}
+                  >
+                    <div className="text-center space-y-2 sm:space-y-3">
+                      <div
+                        className={`text-2xl sm:text-3xl p-2 sm:p-3 rounded-2xl inline-block transition-all duration-500 ${
+                          isSelected
+                            ? "bg-primary/30 shadow-xl shadow-primary/30 scale-110 animate-pulse"
+                            : "bg-muted/30 hover:bg-primary/10"
+                        }`}
+                      >
+                        {cat.icon}
+                      </div>
+                      <div>
+                        <p
+                          className={`font-bold text-sm sm:text-lg mb-1 transition-colors duration-300 ${
+                            isSelected ? "text-primary" : "text-foreground"
+                          }`}
+                        >
+                          {cat.label}
+                        </p>
+                        <p
+                          className={`text-xs sm:text-sm leading-relaxed transition-colors duration-300 ${
+                            isSelected ? "text-foreground" : "text-muted-foreground"
+                          }`}
+                        >
+                          {cat.description}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-bold text-sm sm:text-lg mb-1">{cat.label}</p>
-                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{cat.description}</p>
-                    </div>
+                    {isSelected && (
+                      <div className="absolute top-2 right-2 w-3 h-3 bg-primary rounded-full animate-pulse shadow-lg shadow-primary/50"></div>
+                    )}
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
 
             {/* Selected category highlight */}
