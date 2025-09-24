@@ -267,39 +267,6 @@ export default function PromptOptimizer() {
 
       {/* Main content container */}
       <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-4xl" id="optimizer">
-        {/* AI Tools Compatibility Section */}
-        <Card className="mb-6 sm:mb-8 border-primary/20 elegant-card scroll-reveal float-animation" id="features">
-          <CardHeader className="text-center px-4 sm:px-6">
-            <CardTitle className="flex items-center justify-center gap-2 text-xl sm:text-2xl">
-              <Sparkles className="h-5 w-5 sm:h-6 sm:w-6" />
-              Compatible with All Major AI Tools
-            </CardTitle>
-            <CardDescription className="text-sm sm:text-base">
-              Use your optimized prompts across any AI platform for consistent, professional results
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="px-4 sm:px-6">
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-              {aiTools.map((tool, index) => (
-                <div
-                  key={tool.name}
-                  className={`flex items-center justify-center p-4 sm:p-6 bg-muted/30 rounded-xl border border-border/50 hover:border-primary/30 transition-all duration-200 hover:bg-muted/50 category-card fade-in-delay-${index + 1}`}
-                >
-                  <span className="text-xs sm:text-sm font-medium text-foreground text-center">{tool.name}</span>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 sm:mt-6 text-center">
-              <Badge
-                variant="secondary"
-                className="bg-primary/10 text-primary border-primary/20 px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm"
-              >
-                Universal Compatibility
-              </Badge>
-            </div>
-          </CardContent>
-        </Card>
-
         {/* Choose AI Model */}
         <Card className="mb-6 sm:mb-8 elegant-card scroll-reveal float-animation-delay">
           <CardHeader className="pb-3 sm:pb-4 px-4 sm:px-6">
@@ -607,6 +574,39 @@ export default function PromptOptimizer() {
             </CardContent>
           </Card>
         )}
+
+        {/* AI Tools Compatibility Section */}
+        <Card className="mb-6 sm:mb-8 border-primary/20 elegant-card scroll-reveal float-animation" id="features">
+          <CardHeader className="text-center px-4 sm:px-6">
+            <CardTitle className="flex items-center justify-center gap-2 text-xl sm:text-2xl">
+              <Sparkles className="h-5 w-5 sm:h-6 sm:w-6" />
+              Compatible with All Major AI Tools
+            </CardTitle>
+            <CardDescription className="text-sm sm:text-base">
+              Use your optimized prompts across any AI platform for consistent, professional results
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="px-4 sm:px-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+              {aiTools.map((tool, index) => (
+                <div
+                  key={tool.name}
+                  className={`flex items-center justify-center p-4 sm:p-6 bg-muted/30 rounded-xl border border-border/50 hover:border-primary/30 transition-all duration-200 hover:bg-muted/50 category-card fade-in-delay-${index + 1}`}
+                >
+                  <span className="text-xs sm:text-sm font-medium text-foreground text-center">{tool.name}</span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 sm:mt-6 text-center">
+              <Badge
+                variant="secondary"
+                className="bg-primary/10 text-primary border-primary/20 px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm"
+              >
+                Universal Compatibility
+              </Badge>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Comprehensive Footer */}
